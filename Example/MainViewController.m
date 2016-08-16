@@ -10,7 +10,7 @@
 // Github下载地址 https://github.com/Hanymore/SGTopScrollMenu.git
 
 
-#import "ViewController.h"
+#import "MainViewController.h"
 #import "SGTopScrollMenu.h"
 #import "TestOneVC.h"
 #import "TestTwoVC.h"
@@ -22,16 +22,14 @@
 #import "Test8VC.h"
 #import "Test9VC.h"
 
-@interface ViewController ()<SGTopScrollMenuDelegate, UIScrollViewDelegate>
+@interface MainViewController ()<SGTopScrollMenuDelegate, UIScrollViewDelegate>
 @property (nonatomic, strong) SGTopScrollMenu *topScrollMenu;
 @property (nonatomic, strong) UIScrollView *mainScrollView;
 @property (nonatomic, strong) NSArray *titles;
 
 @end
 
-@implementation ViewController
-
-
+@implementation MainViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -145,15 +143,12 @@
     [self showVc:index];
     
     // 2.把对应的标题选中
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"change" object:@(index) userInfo:nil];
-    
-    // 2.把对应的标题选中
     UILabel *selLabel = self.topScrollMenu.allTitleLabel[index];
     
-    [self.topScrollMenu selectLabel:selLabel];
+    [self.topScrollMenu selectedLabel:selLabel];
 
     // 3.让选中的标题居中
-    [self.topScrollMenu setupTitleCenter:selLabel];
+    [self.topScrollMenu selectedTitleCenter:selLabel];
 }
 
 

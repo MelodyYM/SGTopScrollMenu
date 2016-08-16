@@ -33,8 +33,6 @@
 static CGFloat const labelMargin = 15;
 /** 指示器的高度 */
 static CGFloat const indicatorHeight = 3;
-/** 形变的度数 */
-static CGFloat const radio = 1.0;
 
 - (NSMutableArray *)allTitleLabel {
     if (_allTitleLabel == nil) {
@@ -78,15 +76,16 @@ static CGFloat const radio = 1.0;
     CGFloat labelH = self.frame.size.height - indicatorHeight;
     
     for (NSUInteger i = 0; i < self.titlesArr.count; i++) {
+        
         self.titleLabel = [[UILabel alloc] init];
         _titleLabel.userInteractionEnabled = YES;
         _titleLabel.text = self.titlesArr[i];
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
+        _titleLabel.tag = i;
+
         // 设置高亮文字颜色
         _titleLabel.highlightedTextColor = selectedTitleAndIndicatorViewColor;
  
-        _titleLabel.tag = i;
-        _titleLabel.textAlignment = NSTextAlignmentCenter;
-        
         // 计算内容的Size
         CGSize labelSize = [self sizeWithText:_titleLabel.text font:labelFontOfSize maxSize:CGSizeMake(MAXFLOAT, labelH)];
         // 计算内容的宽度
@@ -127,7 +126,7 @@ static CGFloat const radio = 1.0;
     [self addSubview:_indicatorView];
     
     
-    // 立刻根据文字内容计算第一个label的宽度
+    // 指示器默认在第一个选中位置
     _indicatorView.SG_width = firstLabel.SG_width - 2 * labelMargin;
     _indicatorView.SG_centerX = firstLabel.SG_centerX;
 }
@@ -138,12 +137,12 @@ static CGFloat const radio = 1.0;
     UILabel *selLabel = (UILabel *)tap.view;
     
     // 1.标题颜色变成红色,设置高亮状态下的颜色， 以及指示器位置
-    [self selectLabel:selLabel];
+    [self selectedLabel:selLabel];
     
     // 2.让选中的标题居中
-    [self setupTitleCenter:selLabel];
+    [self selectedTitleCenter:selLabel];
     
-    
+    // 3.代理方法实现
     NSInteger index = selLabel.tag;
     if ([self.topScrollMenuDelegate respondsToSelector:@selector(SGTopScrollMenu:didSelectTitleAtIndex:)]) {
         [self.topScrollMenuDelegate SGTopScrollMenu:self didSelectTitleAtIndex:index];
@@ -151,7 +150,7 @@ static CGFloat const radio = 1.0;
 }
 
 /** 选中label标题颜色变成红色以及指示器位置 */
-- (void)selectLabel:(UILabel *)label {
+- (void)selectedLabel:(UILabel *)label {
     // 取消高亮
     _selectedLabel.highlighted = NO;
     // 取消形变
@@ -161,8 +160,6 @@ static CGFloat const radio = 1.0;
     
     // 高亮
     label.highlighted = YES;
-    // 形变
-    label.transform = CGAffineTransformMakeScale(radio, radio);
     
     _selectedLabel = label;
     
@@ -174,7 +171,7 @@ static CGFloat const radio = 1.0;
 }
 
 /** 设置选中的标题居中 */
-- (void)setupTitleCenter:(UILabel *)centerLabel {
+- (void)selectedTitleCenter:(UILabel *)centerLabel {
     // 计算偏移量
     CGFloat offsetX = centerLabel.center.x - SG_screenWidth * 0.5;
     
