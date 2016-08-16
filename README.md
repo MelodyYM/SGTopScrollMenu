@@ -17,4 +17,6 @@
 
 四、通过Label创建并在其上添加手势（UITapGestureRecognizer）
 
-五、通过- (CGRect)boundingRectWithSize:(CGSize)size options:(NSStringDrawingOptions)options attributes:(nullable NSDictionary<NSString *, id> *)attributes context:(nullable NSStringDrawingContext *)context；方法，根据标题内容：实现标题宽度自适应
+五、通过
+        - (CGRect)boundingRectWithSize:(CGSize)size options:(NSStringDrawingOptions)options attributes:(nullable NSDictionary<NSString *, id> *)attributes context:(nullable NSStringDrawingContext *)context；
+    方法，根据标题内容：实现标题宽度自适应
