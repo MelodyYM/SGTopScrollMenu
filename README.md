@@ -1,5 +1,5 @@
 
-顶部滚动视图菜单 （常见的APP中顶部滚动菜单的选择， 使用UIScrollView进行封装，使用起来极其简单、实用、方便）
+顶部滚动视图菜单 （APP中常见顶部滚动菜单选项，使用UIScrollView进行封装，使用起来极其简单、实用、方便）
 
 一：使用方法一：
 
@@ -13,6 +13,8 @@
 
 二、使用方法二：（请参照Demo中的使用）
 
-三、标题按钮是通过Label创建并在其上添加手势（UITapGestureRecognizer）
+二、父子控制器的创建
 
-四、通过- (CGRect)boundingRectWithSize:(CGSize)size options:(NSStringDrawingOptions)options attributes:(nullable NSDictionary<NSString *, id> *)attributes context:(nullable NSStringDrawingContext *)context；方法，实现顶部标题按钮的自适应宽度
+四、通过Label创建并在其上添加手势（UITapGestureRecognizer）
+
+五、通过- (CGRect)boundingRectWithSize:(CGSize)size options:(NSStringDrawingOptions)options attributes:(nullable NSDictionary<NSString *, id> *)attributes context:(nullable NSStringDrawingContext *)context；方法，根据标题内容：实现标题宽度自适应
