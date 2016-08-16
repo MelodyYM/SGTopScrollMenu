@@ -3,13 +3,13 @@
 
 一：使用方法一：
 
-1、将项目中SGTopScrollMenu文件夹拖入工程
+    1、将项目中SGTopScrollMenu文件夹拖入工程
 
-2、导入#import "SGTopScrollMenu.h"头文件
+    2、导入#import "SGTopScrollMenu.h"头文件
 
-3、通过alloc、initWithFrame或者类方法topScrollMenuWithFrame去创建
+    3、通过alloc、initWithFrame或者类方法topScrollMenuWithFrame去创建
 
-4、遵循SGTopScrollMenuDelegate协议的topScrollMenuDelegate方法（- (void)SGTopScrollMenu:(SGTopScrollMenu *)topScrollMenu didSelectTitleAtIndex:(NSInteger)index；）
+    4、遵循SGTopScrollMenuDelegate协议的topScrollMenuDelegate方法（- (void)SGTopScrollMenu:(SGTopScrollMenu *)topScrollMenu didSelectTitleAtIndex:(NSInteger)index；）
 
 二、使用方法二：（请参照Demo中的使用）
 
