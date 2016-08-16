@@ -11,9 +11,9 @@
 
     4、遵循SGTopScrollMenuDelegate协议的topScrollMenuDelegate方法（- (void)SGTopScrollMenu:(SGTopScrollMenu *)topScrollMenu didSelectTitleAtIndex:(NSInteger)index；）
 
-二、使用方法二：（请参照Demo中的使用）
+二、使用方法二：（详细使用方法，请参考Demo）
 
-二、父子控制器的创建
+三、父子控制器的使用
 
 四、通过Label创建并在其上添加手势（UITapGestureRecognizer）
 
