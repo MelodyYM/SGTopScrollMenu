@@ -43,9 +43,11 @@
     
     
     self.titles = @[@"精选", @"电视剧", @"电影", @"综艺", @"NBA", @"新闻", @"娱乐", @"音乐", @"网络电影"];
-    
+    // , @"NBA", @"新闻", @"娱乐", @"音乐", @"网络电影"
     self.topScrollMenu = [SGTopScrollMenu topScrollMenuWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 44)];
-    _topScrollMenu.titlesArr = [NSArray arrayWithArray:_titles];
+    _topScrollMenu.scrollTitleArr = [NSArray arrayWithArray:_titles];
+//    _topScrollMenu.staticTitleArr = [NSArray arrayWithArray:_titles];
+
     _topScrollMenu.topScrollMenuDelegate = self;
     [self.view addSubview:_topScrollMenu];
     
@@ -70,6 +72,7 @@
     [self.view insertSubview:_mainScrollView belowSubview:_topScrollMenu];
 }
 
+#pragma mark - - - SGTopScrollMenu代理方法
 - (void)SGTopScrollMenu:(SGTopScrollMenu *)topScrollMenu didSelectTitleAtIndex:(NSInteger)index{
 
     // 1 计算滚动的位置
@@ -94,27 +97,27 @@
     TestThreeVC *threeVC = [[TestThreeVC alloc] init];
     [self addChildViewController:threeVC];
     
-    // 精选
+    // 综艺
     TestFourVC *fourVC = [[TestFourVC alloc] init];
     [self addChildViewController:fourVC];
     
-    // 电视剧
+    // NBA
     TestFiveVC *fiveVC = [[TestFiveVC alloc] init];
     [self addChildViewController:fiveVC];
     
-    // 电影
+    // 新闻
     TestSixVC *sixVC = [[TestSixVC alloc] init];
     [self addChildViewController:sixVC];
     
-    // 精选
+    // 娱乐
     Test7VC *VC7 = [[Test7VC alloc] init];
     [self addChildViewController:VC7];
     
-    // 电视剧
+    // 音乐
     Test8VC *VC8 = [[Test8VC alloc] init];
     [self addChildViewController:VC8];
     
-    // 电影
+    // 网络电视
     Test9VC *VC9 = [[Test9VC alloc] init];
     [self addChildViewController:VC9];
 }
@@ -137,7 +140,7 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     
     // 计算滚动到哪一页
-    NSInteger index = scrollView.contentOffset.x / scrollView.bounds.size.width;
+    NSInteger index = scrollView.contentOffset.x / scrollView.frame.size.width;
     
     // 1.添加子控制器view
     [self showVc:index];
@@ -145,10 +148,12 @@
     // 2.把对应的标题选中
     UILabel *selLabel = self.topScrollMenu.allTitleLabel[index];
     
-    [self.topScrollMenu selectedLabel:selLabel];
-
+//    [self.topScrollMenu staticTitleLabelSelecteded:selLabel];
+    
+    
+    [self.topScrollMenu scrollTitleLabelSelecteded:selLabel];
     // 3.让选中的标题居中
-    [self.topScrollMenu selectedTitleCenter:selLabel];
+    [self.topScrollMenu scrollTitleLabelSelectededCenter:selLabel];
 }
 
 

@@ -156,10 +156,6 @@
 			children = (
 				DFFE64911D637B4A00AB6928 /* AppDelegate.h */,
 				DFFE64921D637B4A00AB6928 /* AppDelegate.m */,
-				DFFE64931D637B4A00AB6928 /* Assets.xcassets */,
-				DFFE64941D637B4A00AB6928 /* LaunchScreen.storyboard */,
-				DFFE64961D637B4A00AB6928 /* Main.storyboard */,
-				DFFE64991D637B4A00AB6928 /* main.m */,
 				DFFE649A1D637B4A00AB6928 /* MainViewController.h */,
 				DFFE649B1D637B4A00AB6928 /* MainViewController.m */,
 				DFFE64A11D637B4A00AB6928 /* Test7VC.h */,
@@ -180,6 +176,10 @@
 				DFFE64B01D637B4A00AB6928 /* TestThreeVC.m */,
 				DFFE64B11D637B4A00AB6928 /* TestTwoVC.h */,
 				DFFE64B21D637B4A00AB6928 /* TestTwoVC.m */,
+				DFFE64931D637B4A00AB6928 /* Assets.xcassets */,
+				DFFE64941D637B4A00AB6928 /* LaunchScreen.storyboard */,
+				DFFE64961D637B4A00AB6928 /* Main.storyboard */,
+				DFFE64991D637B4A00AB6928 /* main.m */,
 			);
 			path = Example;
 			sourceTree = "<group>";

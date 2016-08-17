@@ -18,8 +18,11 @@
 #define selectedTitleAndIndicatorViewColor [UIColor redColor]
 
 @interface SGTopScrollMenu ()
-@property (nonatomic, strong) UILabel *titleLabel;
-/** 选中时的label */
+/** 滚动标题Label */
+@property (nonatomic, strong) UILabel *scrollTitleLabel;
+/** 静止标题Label */
+@property (nonatomic, strong) UILabel *staticTitleLabel;
+/** 选中标题时的Label */
 @property (nonatomic, strong) UILabel *selectedLabel;
 /** 指示器 */
 @property (nonatomic, strong) UIView *indicatorView;
@@ -67,48 +70,48 @@ static CGFloat const indicatorHeight = 3;
     return [text boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:attrs context:nil].size;
 }
 
-- (void)setTitlesArr:(NSArray *)titlesArr {
-    _titlesArr = titlesArr;
+#pragma mark - - - 重写滚动标题数组的setter方法
+- (void)setScrollTitleArr:(NSArray *)scrollTitleArr {
+    _scrollTitleArr = scrollTitleArr;
     
-    /** 创建标题Label */
     CGFloat labelX = 0;
     CGFloat labelY = 0;
     CGFloat labelH = self.frame.size.height - indicatorHeight;
     
-    for (NSUInteger i = 0; i < self.titlesArr.count; i++) {
-        
-        self.titleLabel = [[UILabel alloc] init];
-        _titleLabel.userInteractionEnabled = YES;
-        _titleLabel.text = self.titlesArr[i];
-        _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.tag = i;
+    for (NSUInteger i = 0; i < self.scrollTitleArr.count; i++) {
+        /** 创建滚动时的标题Label */
+        self.scrollTitleLabel = [[UILabel alloc] init];
+        _scrollTitleLabel.userInteractionEnabled = YES;
+        _scrollTitleLabel.text = self.scrollTitleArr[i];
+        _scrollTitleLabel.textAlignment = NSTextAlignmentCenter;
+        _scrollTitleLabel.tag = i;
 
         // 设置高亮文字颜色
-        _titleLabel.highlightedTextColor = selectedTitleAndIndicatorViewColor;
+        _scrollTitleLabel.highlightedTextColor = selectedTitleAndIndicatorViewColor;
  
         // 计算内容的Size
-        CGSize labelSize = [self sizeWithText:_titleLabel.text font:labelFontOfSize maxSize:CGSizeMake(MAXFLOAT, labelH)];
+        CGSize labelSize = [self sizeWithText:_scrollTitleLabel.text font:labelFontOfSize maxSize:CGSizeMake(MAXFLOAT, labelH)];
         // 计算内容的宽度
         CGFloat labelW = labelSize.width + 2 * labelMargin;
         
-        _titleLabel.frame = CGRectMake(labelX, labelY, labelW, labelH);
+        _scrollTitleLabel.frame = CGRectMake(labelX, labelY, labelW, labelH);
         
         // 计算每个label的X值
         labelX = labelX + labelW;
         
         // 添加到titleLabels数组
-        [self.allTitleLabel addObject:_titleLabel];
+        [self.allTitleLabel addObject:_scrollTitleLabel];
         
         // 添加点按手势
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(titleClick:)];
-        [_titleLabel addGestureRecognizer:tap];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollTitleClick:)];
+        [_scrollTitleLabel addGestureRecognizer:tap];
         
         // 默认选中第0个label
         if (i == 0) {
-            [self titleClick:tap];
+            [self scrollTitleClick:tap];
         }
 
-        [self addSubview:_titleLabel];
+        [self addSubview:_scrollTitleLabel];
     }
     
     // 计算scrollView的宽度
@@ -127,20 +130,22 @@ static CGFloat const indicatorHeight = 3;
     
     
     // 指示器默认在第一个选中位置
-    _indicatorView.SG_width = firstLabel.SG_width - 2 * labelMargin;
+    // 计算TitleLabel内容的Size
+    CGSize labelSize = [self sizeWithText:firstLabel.text font:labelFontOfSize maxSize:CGSizeMake(MAXFLOAT, labelH)];
+    _indicatorView.SG_width = labelSize.width;
     _indicatorView.SG_centerX = firstLabel.SG_centerX;
 }
 
-#pragma mark - - - Label的点击事件
-- (void)titleClick:(UITapGestureRecognizer *)tap {
+/** scrollTitleClick的点击事件 */
+- (void)scrollTitleClick:(UITapGestureRecognizer *)tap {
     // 0.获取选中的label
     UILabel *selLabel = (UILabel *)tap.view;
     
     // 1.标题颜色变成红色,设置高亮状态下的颜色， 以及指示器位置
-    [self selectedLabel:selLabel];
+    [self scrollTitleLabelSelecteded:selLabel];
     
-    // 2.让选中的标题居中
-    [self selectedTitleCenter:selLabel];
+    // 2.让选中的标题居中 (当contentSize 大于self的宽度才会生效)
+    [self scrollTitleLabelSelectededCenter:selLabel];
     
     // 3.代理方法实现
     NSInteger index = selLabel.tag;
@@ -149,12 +154,12 @@ static CGFloat const indicatorHeight = 3;
     }
 }
 
-/** 选中label标题颜色变成红色以及指示器位置 */
-- (void)selectedLabel:(UILabel *)label {
+/** 滚动标题选中颜色改变以及指示器位置变化 */
+- (void)scrollTitleLabelSelecteded:(UILabel *)label {
+
     // 取消高亮
     _selectedLabel.highlighted = NO;
-    // 取消形变
-    _selectedLabel.transform = CGAffineTransformIdentity;
+    
     // 颜色恢复
     _selectedLabel.textColor = [UIColor blackColor];
     
@@ -170,8 +175,8 @@ static CGFloat const indicatorHeight = 3;
     }];
 }
 
-/** 设置选中的标题居中 */
-- (void)selectedTitleCenter:(UILabel *)centerLabel {
+/** 滚动标题选中居中 */
+- (void)scrollTitleLabelSelectededCenter:(UILabel *)centerLabel {
     // 计算偏移量
     CGFloat offsetX = centerLabel.center.x - SG_screenWidth * 0.5;
     
@@ -184,6 +189,102 @@ static CGFloat const indicatorHeight = 3;
     
     // 滚动标题滚动条
     [self setContentOffset:CGPointMake(offsetX, 0) animated:YES];
+}
+
+#pragma mark - - - 重写静止标题数组的setter方法
+- (void)setStaticTitleArr:(NSArray *)staticTitleArr {
+    _staticTitleArr = staticTitleArr;
+    
+    // 计算scrollView的宽度
+    CGFloat scrollViewWidth = self.frame.size.width;
+    CGFloat labelX = 0;
+    CGFloat labelY = 0;
+    CGFloat labelW = scrollViewWidth / self.staticTitleArr.count;
+    CGFloat labelH = self.frame.size.height - indicatorHeight;
+    
+    for (NSInteger j = 0; j < self.staticTitleArr.count; j++) {
+        // 创建静止时的标题Label
+        self.staticTitleLabel = [[UILabel alloc] init];
+        _staticTitleLabel.userInteractionEnabled = YES;
+        _staticTitleLabel.text = self.staticTitleArr[j];
+        _staticTitleLabel.textAlignment = NSTextAlignmentCenter;
+        _staticTitleLabel.tag = j;
+        
+        // 设置高亮文字颜色
+        _staticTitleLabel.highlightedTextColor = selectedTitleAndIndicatorViewColor;
+        
+        // 计算staticTitleLabel的x值
+        labelX = j * labelW;
+        
+        _staticTitleLabel.frame = CGRectMake(labelX, labelY, labelW, labelH);
+        
+        // 添加到titleLabels数组
+        [self.allTitleLabel addObject:_staticTitleLabel];
+        
+        // 添加点按手势
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(staticTitleClick:)];
+        [_staticTitleLabel addGestureRecognizer:tap];
+        
+        // 默认选中第0个label
+        if (j == 0) {
+            [self staticTitleClick:tap];
+        }
+        
+        [self addSubview:_staticTitleLabel];
+    }
+
+    // 取出第一个子控件
+    UILabel *firstLabel = self.subviews.firstObject;
+    
+    // 添加指示器
+    self.indicatorView = [[UIView alloc] init];
+    _indicatorView.backgroundColor = selectedTitleAndIndicatorViewColor;
+    _indicatorView.SG_height = indicatorHeight;
+    _indicatorView.SG_y = self.frame.size.height - indicatorHeight;
+    [self addSubview:_indicatorView];
+    
+    
+    // 指示器默认在第一个选中位置
+    // 计算TitleLabel内容的Size
+    CGSize labelSize = [self sizeWithText:firstLabel.text font:labelFontOfSize maxSize:CGSizeMake(MAXFLOAT, labelH)];
+    _indicatorView.SG_width = labelSize.width;
+    _indicatorView.SG_centerX = firstLabel.SG_centerX;
+}
+
+/** staticTitleClick的点击事件 */
+- (void)staticTitleClick:(UITapGestureRecognizer *)tap {
+    // 0.获取选中的label
+    UILabel *selLabel = (UILabel *)tap.view;
+    
+    // 1.标题颜色变成红色,设置高亮状态下的颜色， 以及指示器位置
+    [self staticTitleLabelSelecteded:selLabel];
+    
+    // 2.代理方法实现
+    NSInteger index = selLabel.tag;
+    if ([self.topScrollMenuDelegate respondsToSelector:@selector(SGTopScrollMenu:didSelectTitleAtIndex:)]) {
+        [self.topScrollMenuDelegate SGTopScrollMenu:self didSelectTitleAtIndex:index];
+    }
+}
+/** 静止标题选中颜色改变以及指示器位置变化 */
+- (void)staticTitleLabelSelecteded:(UILabel *)label {
+    // 取消高亮
+    _selectedLabel.highlighted = NO;
+    
+    // 颜色恢复
+    _selectedLabel.textColor = [UIColor blackColor];
+    
+    // 高亮
+    label.highlighted = YES;
+    
+    _selectedLabel = label;
+    
+    // 改变指示器位置
+    [UIView animateWithDuration:0.20 animations:^{
+        // 计算内容的Size
+        CGSize labelSize = [self sizeWithText:_selectedLabel.text font:labelFontOfSize maxSize:CGSizeMake(MAXFLOAT, self.frame.size.height - indicatorHeight)];
+        self.indicatorView.SG_width = labelSize.width;
+        self.indicatorView.SG_centerX = label.SG_centerX;
+    }];
 }
 
 
