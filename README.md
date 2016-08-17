@@ -18,3 +18,10 @@
 四、通过Label创建并在其上添加手势（UITapGestureRecognizer）
 
 五、通过 - (CGRect)boundingRectWithSize:(CGSize)size options:(NSStringDrawingOptions)options attributes:(nullable NSDictionary<NSString *, id> *)attributes context:(nullable NSStringDrawingContext *)context;根据标题内容：实现标题宽度自适应
+
+注：
+    增加静止状态下的顶部标题按钮的创建
+    
+    滚动和静止2中状态，可供选择，请根据自己项目需要，选择合适的方法去创建，详细内容请参考Demo
+    
+    有什么比较好的意见或想法欢迎来探讨（让我们一起学习、一起进步）
